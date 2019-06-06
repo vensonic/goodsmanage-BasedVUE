@@ -5,18 +5,18 @@
       <el-form
         :model="LoginForm"
         :rules="rules"
-        ref="LoginForm"
+        ref="Login-Form"
         class="demo-ruleForm"
       >
         <el-form-item prop="username">
           <el-input v-model="LoginForm.username" prefix-icon="myicon myicon-user" placeholder="请输入用户名"></el-input>
         </el-form-item>
          <el-form-item prop="password">
-          <el-input v-model="LoginForm.password" prefix-icon="myicon myicon-key" placeholder="请输入密码"  @keyup.13.native="LoginSbumit('LoginForm')"></el-input>
+          <el-input type="password" v-model="LoginForm.password" prefix-icon="myicon myicon-key" placeholder="请输入密码"  @keyup.13.native="LoginSbumit('Login-Form')" show-password></el-input>
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" class="login-btn"  @click="LoginSbumit('LoginForm')">登录</el-button>
+          <el-button type="primary" class="login-btn"  @click="LoginSbumit('Login-Form')">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -49,6 +49,8 @@ export default {
         if (valid) {
           // login返回的是一个promise对象
           login(this.LoginForm).then((res) => {
+            // 将token值存储到本地
+            localStorage.setItem('shoppro_token', res.data.token)
             if (res.meta.status === 200) {
               // 跳转到homepage
               this.$router.push({ name: 'Home' })
