@@ -52,6 +52,10 @@ export default {
             // 将token值存储到本地
             localStorage.setItem('shoppro_token', res.data.token)
             if (res.meta.status === 200) {
+              // console.log(this.$store.state.currentUser)
+              // this.$store.state.currentUser = res.data.username
+              // this.$store.commit('setcurrentUser', res.data.username)
+              this.$store.dispatch('setcurrentUser', res.data.username)
               // 跳转到homepage
               this.$router.push({ name: 'Home' })
             } else {

@@ -1,50 +1,37 @@
 <template>
   <div class="home">
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="auto">
         <h1 class="logo"></h1>
         <el-menu
           default-active="2"
-          class="el-menu-vertical-demo"
+          class="el-menu-admin"
           :unique-opened="true"
           :router="true"
+          :collapse="isCollapse"
           background-color="#409EFF"
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-submenu index="1">
+          <el-submenu :index="item.id+''" v-for="item in menuList" :key="item.id">
             <template slot="title">
               <i class="el-icon-user-solid"></i>
-              <span>用户管理</span>
+              <span>{{item.authName}}</span>
             </template>
-            <el-menu-item index="/home/userlist">
+            <el-menu-item :index="'/home/'+sub.path" v-for="sub in item.children " :key="sub.id">
               <i class="el-icon-user"></i>
-              <span>用户列表</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-s-check"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="2-1">
-              <i class="el-icon-s-custom"></i>
-              <span>角色列表</span>
-            </el-menu-item>
-            <el-menu-item index="2-2">
-              <i class="el-icon-menu"></i>
-              <span>权限列表</span>
+              <span>{{sub.authName}}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
       <el-container>
         <el-header>
-          <span class="toggle-btn myicon myicon-menu"></span>
+          <span class="toggle-btn myicon myicon-menu" @click="isCollapse = !isCollapse"></span>
           <h2 class="system-title">电商后台管理系统</h2>
           <div class="welcome">
-              <span>你好:admin</span>
-              <a href="javascript:;">退出</a>
+              <span>你好:{{$store.getters.getcurrentUser}}</span>
+              <a href="javascript:;" @click="loginout">退出</a>
           </div>
         </el-header>
         <el-main>
@@ -55,12 +42,31 @@
   </div>
 </template>
 <script>
-export default {}
+import { getMenus } from '@/api/rights'
+export default {
+  data () {
+    return {
+      menuList: [],
+      isCollapse: false
+    }
+  },
+  methods: {
+    loginout () {
+      localStorage.clear()
+      this.$router.push({ name: 'Login' })
+    }
+  },
+  mounted () {
+    getMenus().then((res) => {
+      this.menuList = res.data.data
+    })
+  }
+}
 </script>
 <style lang="less" scoped>
 .home {
   height: 100%;
-  .el-menu-admin:not(.el-menu--collapse) {
+   .el-menu-admin:not(.el-menu--collapse) {
     width: 200px;
     min-height: 400px;
   }
@@ -81,7 +87,7 @@ export default {}
     background: url(../assets/logo.png);
     background-size: cover;
     background-color: #fff;
-    width: 200px;
+    width: auto
   }
   .toggle-btn {
     padding: 0 15px;

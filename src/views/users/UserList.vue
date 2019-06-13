@@ -251,8 +251,7 @@ export default {
         id: '',
         rid: ''
       },
-      roleList: [],
-      value: ''
+      roleList: []
     }
   },
   methods: {
@@ -419,6 +418,7 @@ export default {
       // console.log(res)
       this.roleList = res.data
     })
+    console.log(this.$route)
   }
 }
 </script>

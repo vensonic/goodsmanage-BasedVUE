@@ -32,3 +32,37 @@ export const setRoleById = (id, rid) => {
       return result.data
     })
 }
+
+// 根据角色id和权限id删除角色对应的权限
+
+export const delRoleRightByRid = (roleId, rightId) => {
+  return axios.delete(`roles/${roleId}/rights/${rightId}`)
+}
+
+// 角色授权
+
+export const setRolesRight = (roleId, rids) => {
+  return axios({
+    method: 'post',
+    url: `roles/${roleId}/rights`,
+    data: {
+      rids: rids
+    }
+  })
+}
+
+// 添加角色
+
+export const addRole = (obj) => {
+  return axios.post('roles', obj)
+}
+
+// 删除角色
+export const delRoleById = (Rid) => {
+  return axios.delete(`roles/${Rid}`)
+}
+
+// 编辑角色
+export const editRoleById = (obj) => {
+  return axios.put(`roles/${obj.id}`, obj)
+}
